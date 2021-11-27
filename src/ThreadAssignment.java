@@ -1,28 +1,30 @@
 public class ThreadAssignment {
-
     static class Counter {
-        void count() {
-            //todo implement me
+        public synchronized void count() {
+            for (int i = 350; i >= 1; i--)
+                System.out.println(i);
+            System.out.println("finich");
         }
     }
-
     static class MyThread extends Thread {
         private final Counter counter;
 
         public MyThread(Counter counter) {
             this.counter = counter;
         }
-
         @Override
         public void run() {
             counter.count();
         }
     }
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Counter counter = new Counter();
-
-        new MyThread(counter).start();
-        new MyThread(counter).start();
+        MyThread t1 = new MyThread(counter);
+        t1.start();
+        MyThread t2 = new MyThread(counter);
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println("done !");
     }
 }
